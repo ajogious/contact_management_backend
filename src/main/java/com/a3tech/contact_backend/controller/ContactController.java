@@ -73,4 +73,16 @@ public class ContactController {
         }).orElse(ResponseEntity.notFound().build());
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteContact(@PathVariable Long id) {
+
+        if (!contactRepository.existsById(id)) {
+            return ResponseEntity.notFound().build();
+        }
+
+        contactRepository.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
+
+
 }
