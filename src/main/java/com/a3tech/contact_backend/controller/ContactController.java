@@ -45,5 +45,32 @@ public class ContactController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<Contact> updateContact(
+            @PathVariable Long id,
+            @RequestBody Contact updatedContact) {
+
+        return contactRepository.findById(id).map(existingContact -> {
+
+            // Update basic fields
+            existingContact.setName(updatedContact.getName());
+            existingContact.setEmail(updatedContact.getEmail());
+
+            // Remove old phone numbers
+            existingContact.getPhoneNumbers().clear();
+
+            // Add new phone numbers
+            if (updatedContact.getPhoneNumbers() != null) {
+                updatedContact.getPhoneNumbers().forEach(phone -> {
+                    phone.setContact(existingContact);
+                    existingContact.getPhoneNumbers().add(phone);
+                });
+            }
+
+            Contact savedContact = contactRepository.save(existingContact);
+            return ResponseEntity.ok(savedContact);
+
+        }).orElse(ResponseEntity.notFound().build());
+    }
 
 }
