@@ -38,4 +38,12 @@ public class ContactController {
         return ResponseEntity.ok(contacts);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Contact> getContactById(@PathVariable Long id) {
+        return contactRepository.findById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+
 }
