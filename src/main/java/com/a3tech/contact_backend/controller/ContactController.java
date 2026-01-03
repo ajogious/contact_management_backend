@@ -31,4 +31,11 @@ public class ContactController {
         Contact savedContact = contactRepository.save(contact);
         return new ResponseEntity<>(savedContact, HttpStatus.CREATED);
     }
+
+    @GetMapping
+    public ResponseEntity<List<Contact>> getAllContacts() {
+        List<Contact> contacts = contactRepository.findAll();
+        return ResponseEntity.ok(contacts);
+    }
+
 }
